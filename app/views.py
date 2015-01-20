@@ -46,8 +46,7 @@ def login():
 def tasks():
     g.db = connect_db()
 
-    cur = g.db.execute('SELECT name, due_date, priority, task_id FROM tasks \
-        WHERE status=0')
+    cur = g.db.execute('SELECT name, due_date, priority, task_id FROM tasks WHERE status=0')
     closed_tasks = [dict(name=row[0], 
                          due_date=row[1], 
                          priority=row[2],
@@ -87,7 +86,7 @@ def new_task():
         return redirect(url_for('tasks'))
 
 # Mark stats as complete
-@app.route('/complete/<int:task_id>/',)
+@app.route('/complete/<int:task_id>/')
 @login_required
 def complete(task_id):
     g.db = connect_db()
@@ -98,7 +97,7 @@ def complete(task_id):
     return redirect(url_for('tasks'))
 
 # Delete Tasks:
-@app.route('/delete/<int:task_id>/',)
+@app.route('/delete/<int:task_id>/')
 @login_required
 def delete_entry(task_id):
     g.db = connect_db()
