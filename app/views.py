@@ -4,6 +4,7 @@ from flask import Flask, flash, redirect, render_template, request, session,\
     url_for, g
 from functools import wraps
 import sqlite3
+from forms import AddTaskForm
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -72,14 +73,14 @@ def tasks():
 def new_task():
     g.db = connect_db()
     name = request.form['name']
-    date = request.form['date']
+    date = request.form['due_date']
     priority = request.form['priority']
     if not name or not date or not priority:
         flash("All fields are required.  Please try again.")
         return redirect(url_for('tasks'))
     else:
         g.db.execute("""INSERT INTO tasks (name, due_date, priority, status) 
-                        VALUES (?, ?, ?, 1)""", [name, due_date, priority])
+                        VALUES (?, ?, ?, 1)""", [name, date, priority])
         g.db.commit()
         g.db.close()
         flash('New entry was sucessfully posted.  Thanks.')
