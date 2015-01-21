@@ -100,11 +100,12 @@ def register():
     error = None
     form = RegisterForm(request.form)
     if request.method == 'POST':
+        #import pdb; pdb.set_trace()
         if form.validate_on_submit():
             new_user = User(
                 form.name.data,
                 form.email.data,
-                form.password.data,
+                form.password.data
             )
             db.session.add(new_user)
             db.session.commit()

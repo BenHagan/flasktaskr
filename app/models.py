@@ -29,7 +29,7 @@ class User(db.Model):
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
 
-    def __init_(self, name=None, email=None, password=None):
+    def __init__(self, name=None, email=None, password=None):
         self.name = name
         self.email = email
         self.password = password
