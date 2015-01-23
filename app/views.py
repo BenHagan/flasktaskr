@@ -33,7 +33,7 @@ def login():
     error = None
     form = LoginForm(request.form)
     if request.method == 'POST':
-        import pdb;pdb.set_trace()
+        #import pdb;pdb.set_trace()
         if form.validate_on_submit():
             u = User.query.filter_by(
                 name = request.form['name'],
@@ -95,7 +95,7 @@ def new_task():
 def complete(task_id):
     new_id = task_id
     db.session.query(Task).filter_by(task_id=new_id).update({"status":"0"})
-    ad.session.commit()
+    db.session.commit()
     flash('The task was marked as complete.  Nice.')
     return redirect(url_for('tasks'))
 
