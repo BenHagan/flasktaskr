@@ -132,6 +132,6 @@ def register():
             flash("Thanks for registering.  Please login.")
             return redirect(url_for('login'))
         else:
-            render_template('register.html', form=form, error=error)
+            return render_template('register.html', form=form, error=error)
     if request.method == 'GET':
         return render_template('register.html', form=form)            
