@@ -64,7 +64,9 @@ h2 {
 }
 
 .error {
-  background: #F0D6D6;
+  color: red;
+  font-size: .8em;
+  background: ffffff;
   padding: 0.5em;
 }
 
