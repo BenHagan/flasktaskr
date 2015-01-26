@@ -59,6 +59,7 @@ def login():
                 form=form,
                 error=error)
     if request.method == 'GET':
+        import pdb;pdb.set_trace()
         return render_template('login.html', form=form)
 
 @app.route('/tasks')
