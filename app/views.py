@@ -25,6 +25,7 @@ def login_required(test):
     return wrap
 
 @app.route('/logout')
+@login_required
 def logout():
     session.pop('logged_in', None)
     session.pop('user_id', None)
@@ -93,7 +94,7 @@ def new_task():
             )
             db.session.add(new_task)
             db.session.commit()
-            flash('New entry was successfully posted.  Thanks.')
+            flash('New entry was successfully posted. Thanks.')
         return redirect(url_for('tasks'))
 
 # Mark stats as complete
