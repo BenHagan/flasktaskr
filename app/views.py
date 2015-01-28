@@ -83,6 +83,7 @@ def tasks():
 def new_task():
     form = AddTaskForm(request.form)
     if request.method == 'POST':
+        #import pdb;pdb.set_trace()
         if form.validate_on_submit():
             new_task = Task(
                 form.name.data,
@@ -95,7 +96,13 @@ def new_task():
             db.session.add(new_task)
             db.session.commit()
             flash('New entry was successfully posted. Thanks.')
-        return redirect(url_for('tasks'))
+            return redirect(url_for('tasks'))
+        else:
+            return render_template('tasks.html',
+                form=form,
+                )
+    if request.method == 'GET':
+        return render_template('tasks.html', form=form)
 
 # Mark stats as complete
 @app.route('/complete/<int:task_id>/')

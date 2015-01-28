@@ -148,6 +148,7 @@ class AllTests(unittest.TestCase):
         self.create_user('Michael', 'michael@realpython.com', 'python')
         self.login('Michael', 'python')
         self.app.get('/tasks', follow_redirects=True)
+        #import pdb;pdb.set_trace()
         response = self.app.post('/add/', data=dict(
             name='Go to the bank',
             due_date='',
