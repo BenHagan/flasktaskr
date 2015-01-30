@@ -101,8 +101,6 @@ def new_task():
             return render_template('tasks.html',
                 form=form,
                 )
-    if request.method == 'GET':
-        return render_template('tasks.html', form=form)
 
 # Mark stats as complete
 @app.route('/complete/<int:task_id>/')

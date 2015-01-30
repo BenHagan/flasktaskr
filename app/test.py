@@ -100,7 +100,7 @@ class AllTests(unittest.TestCase):
             'python', 'python')
         assert 'Thanks for registering.  Please login' in response.get_data()
 
-    def test_user_registration_error(self):
+    def test_duplicate_user_registration_throws_error(self):
         #self.app.get('/register', follow_redirects=True)
         self.register('Michael', 'michael@realpython.com',
             'python', 'python')
@@ -186,6 +186,11 @@ class AllTests(unittest.TestCase):
         response=self.app.get("complete/1/", follow_redirects=True)
         self.assertNotIn('The task was marked as complete. Nice.',
          response.get_data())
+
+    def test_user_registration_field_errors(self):
+        response = self.register(
+            'Michael', 'michael@realpython.com', 'python', '')
+        self.assertIn('This field is required.', response.data)
 
 if __name__ == "__main__":
     unittest.main()
