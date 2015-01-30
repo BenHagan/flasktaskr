@@ -12,3 +12,4 @@
 test.db
 app/htmlcov
 app/.coverage
+.coverage
