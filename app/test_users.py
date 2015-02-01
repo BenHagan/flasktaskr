@@ -36,6 +36,12 @@ class TestUsers(unittest.TestCase):
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
 
+    def create_user(self, name="Michael", email="michael@realpython.com", 
+        password="python"):
+        new_user = User(name=name, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+
 
     # each test should start with 'test'
     def test_users_can_register(self):
@@ -116,6 +122,8 @@ class TestUsers(unittest.TestCase):
         print users
         for user in users:
             self.assertEquals(user.role, 'user')
+
+
 
 if __name__ == "__main__":
     unittest.main()

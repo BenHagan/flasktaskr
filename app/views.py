@@ -29,6 +29,7 @@ def login_required(test):
 def logout():
     session.pop('logged_in', None)
     session.pop('user_id', None)
+    session.pop('role', None)
     flash('You are logged out. Bye. :(')
     return redirect(url_for('login'))
 
@@ -52,6 +53,7 @@ def login():
             else:
                 session['logged_in'] = True
                 session['user_id'] = u.id
+                session['role'] = u.role
                 flash('You are logged in.  Go Crazy.')
                 return redirect(url_for('tasks'))
         else:
@@ -108,7 +110,8 @@ def new_task():
 def complete(task_id):
     new_id = task_id
     task = db.session.query(Task).filter_by(task_id=new_id)
-    if session['user_id'] == task.first().user_id:
+    if session['user_id'] == task.first().user_id or \
+    session['role'] == "admin":
         task.update({"status": "0"})
         db.session.commit()
         flash('The task was marked as complete. Nice.')
@@ -123,7 +126,8 @@ def complete(task_id):
 def delete_entry(task_id):
     new_id = task_id
     task = db.session.query(Task).filter_by(task_id=new_id)
-    if session['user_id'] == task.first().user_id:
+    if session['user_id'] == task.first().user_id or \
+    session['role'] == "admin":
         task.delete()
         db.session.commit()
         flash('The task was deleted. Why not add a new one?')
@@ -160,8 +164,8 @@ def register():
     if request.method == 'GET':
         return render_template('register.html', form=form)
 
-def flash_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(u"Error in the %s field - %s" % \
-                (getattr(form, field).label.text, error), 'error')            
+# def flash_errors(form):
+#     for field, errors in form.errors.items():
+#         for error in errors:
+#             flash(u"Error in the %s field - %s" % \
+#                 (getattr(form, field).label.text, error), 'error')            
