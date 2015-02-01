@@ -27,13 +27,15 @@ class TestUsers(unittest.TestCase):
         return self.app.post('/', data=dict(name=name, password=password),
             follow_redirects=True)
 
-    def register(self, name, email, password, confirm):
+    def register(self, name="Michael", email="michael@realpython.com", 
+        password="python", confirm="python"):
         return self.app.post('/register', data=dict(
             name=name, email=email, password=password, confirm=confirm),
             follow_redirects=True)
 
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
+
 
     # each test should start with 'test'
     def test_users_can_register(self):
@@ -58,12 +60,12 @@ class TestUsers(unittest.TestCase):
         self.assertIn('Invalid username or password', response.get_data())
 
     def test_users_can_login(self):
-        self.register('Michael', 'michael@realpython.com', 'python', 'python')
+        self.register()
         response = self.login('Michael', 'python')
         self.assertIn('You are logged in.  Go Crazy.', response.get_data())
 
     def test_invalid_form_data(self):
-        self.register('Michael', 'michael@realpython.com', 'python', 'python')
+        self.register()
         response = self.login('alert("alert box!");', 'foo')
         self.assertIn('Invalid username or password', response.get_data())
 
@@ -75,18 +77,15 @@ class TestUsers(unittest.TestCase):
 
     def test_user_registration(self):
         self.app.get('/register', follow_redirects=True)
-        response = self.register('Michael', 'michael@realpython.com',
-            'python', 'python')
+        response = self.register()
         assert 'Thanks for registering.  Please login' in response.get_data()
 
     def test_duplicate_user_registration_throws_error(self):
         #self.app.get('/register', follow_redirects=True)
-        self.register('Michael', 'michael@realpython.com',
-            'python', 'python')
+        self.register()
 
         #self.app.get('/register', follow_redirects=True)
-        response = self.register('Michael', 'michael@realpython.com',
-            'python', 'python')
+        response = self.register()
 
         self.assertIn(
             'Oh no! That username and/or email already exists.',
