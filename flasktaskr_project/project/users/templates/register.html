@@ -1,5 +1,7 @@
 {% extends "template.html" %}
+
 {% block content %}
+
 	<h1>Welcome to FlaskTaskr.</h1>
 	<form class="form-signin" role="form" method="post" action="">
 		<div class="lead">Please register to start a task list</div>
@@ -47,7 +49,7 @@
 		<button class="btn btn-sm btn-success" type="submit">Register</button>
 		<br>
 		<br>
-		<p><em>Alread registered?</em> Click <a href="/">here</a> to login.</p>	
+		<p><em>Alread registered?</em> Click <a href="{{ url_for('users.login') }}">here</a> to login.</p>
 	</form>	
 
 {% endblock %}
