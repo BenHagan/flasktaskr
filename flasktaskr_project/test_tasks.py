@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from project import app, db
+from project import app, db, bcrypt
 from config import basedir
 from project.models import User
 
@@ -25,12 +25,18 @@ class TestTasks(unittest.TestCase):
     def register(self, name="Michael", email="michael@realpython.com", 
         password="python", confirm="python"):
         return self.app.post('/users/register/', data=dict(
-            name=name, email=email, password=password, confirm=confirm),
+            name=name, 
+            email=email, 
+            password=password, 
+            confirm=confirm),
             follow_redirects=True)
 
     def create_user(self, name="Michael", email="Michael@realpython.com", 
         password="python"):
-        new_user = User(name=name, email=email, password=password)
+        new_user = User(
+            name=name, 
+            email=email, 
+            password=bcrypt.generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
 
@@ -54,7 +60,7 @@ class TestTasks(unittest.TestCase):
         new_user = User(
             name = 'Superman',
             email = 'admin@realpython.com',
-            password = 'allpowerful',
+            password = bcrypt.generate_password_hash('allpowerful'),
             role = 'admin'
         )
         db.session.add(new_user)
