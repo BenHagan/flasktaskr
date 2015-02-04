@@ -18,8 +18,8 @@ tasks_blueprint = Blueprint(
 
 # routes
 
-#@tasks_blueprint.route('/tasks/')
-@tasks_blueprint.route('/')
+@tasks_blueprint.route('/tasks/')
+#@tasks_blueprint.route('/')
 @login_required
 def tasks():
     open_tasks = db.session.query(Task) \

@@ -24,7 +24,7 @@ class TestTasks(unittest.TestCase):
 
     def register(self, name="Michael", email="michael@realpython.com", 
         password="python", confirm="python"):
-        return self.app.post('/register', data=dict(
+        return self.app.post('/users/register', data=dict(
             name=name, email=email, password=password, confirm=confirm),
             follow_redirects=True)
 
@@ -44,7 +44,7 @@ class TestTasks(unittest.TestCase):
 
     # login helper function
     def login(self, name, password):
-        return self.app.post('/', data=dict(name=name, password=password),
+        return self.app.post('/users', data=dict(name=name, password=password),
             follow_redirects=True)
 
     def logout(self):
@@ -61,10 +61,11 @@ class TestTasks(unittest.TestCase):
         db.session.commit()
 
     def test_logged_in_users_can_access_tasks_page(self):
+        #import pdb;pdb.set_trace()
         self.register('Fletcher', 'fletcher@realpython.com',
             'python101', 'python101')
         self.login('Fletcher', 'python101')
-        response = self.app.get('/tasks')
+        response = self.app.get('/tasks/tasks', follow_redirects=True)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Add a new task:', response.get_data())
 
