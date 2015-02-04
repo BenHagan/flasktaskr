@@ -24,17 +24,17 @@ class TestUsers(unittest.TestCase):
 
         # login helper function
     def login(self, name, password):
-        return self.app.post('/', data=dict(name=name, password=password),
+        return self.app.post('/users/', data=dict(name=name, password=password),
             follow_redirects=True)
 
     def register(self, name="Michael", email="michael@realpython.com", 
         password="python", confirm="python"):
-        return self.app.post('/register', data=dict(
+        return self.app.post('/users/register/', data=dict(
             name=name, email=email, password=password, confirm=confirm),
             follow_redirects=True)
 
     def logout(self):
-        return self.app.get('/logout', follow_redirects=True)
+        return self.app.get('/users/logout', follow_redirects=True)
 
     def create_user(self, name="Michael", email="michael@realpython.com", 
         password="python"):
@@ -55,7 +55,7 @@ class TestUsers(unittest.TestCase):
 
     def test_form_is_present_on_login_page(self):
         #import pdb;pdb.set_trace()
-        response = self.app.get('/')
+        response = self.app.get('/', follow_redirects=True)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Please sign in to access your task list', 
             response.get_data())
@@ -76,13 +76,13 @@ class TestUsers(unittest.TestCase):
         self.assertIn('Invalid username or password', response.get_data())
 
     def test_form_is_present_on_register_page(self):
-        response = self.app.get('/register')
+        response = self.app.get('/users/register/')
         self.assertEquals(response.status_code, 200)
         self.assertIn('Please register to start a task list', 
             response.get_data())
 
     def test_user_registration(self):
-        self.app.get('/register', follow_redirects=True)
+        self.app.get('/users/register/', follow_redirects=True)
         response = self.register()
         assert 'Thanks for registering.  Please login' in response.get_data()
 
