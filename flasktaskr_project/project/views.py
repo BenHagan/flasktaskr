@@ -1,7 +1,7 @@
 # views.py
 
 from project import app, db
-from flask import flash, redirect, session, url_for
+from flask import flash, redirect, session, url_for, render_template
 from functools import wraps
 
 # helper functions
@@ -25,4 +25,12 @@ def flash_errors(form):
 # routes
 @app.route('/', defaults={'page': 'index'})
 def index(page):
-    return redirect(url_for('tasks.tasks'))            
+    return redirect(url_for('tasks.tasks'))
+
+@app.errorhandler(404)
+def internal_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
