@@ -168,5 +168,51 @@ class TestTasks(unittest.TestCase):
             response.data
         )
 
+    def test_task_template_displays_logged_in_user_name(self):
+        self.register()
+        self.login('Michael', 'python')
+        response = self.app.get('/tasks/', follow_redirects=True)
+        self.assertIn('Michael', response.get_data())
+
+    def test_users_cannot_see_task_modify_links_for_tasks_not_created_by_them(self):
+        self.create_user()
+        self.login('Michael', 'python')
+        self.app.get('/tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.create_user('Fletcher', 'fletcher@realpython.com', 'python101')
+        response = self.login('Fletcher', 'python101')
+        self.app.get('/tasks', follow_redirects=True)
+        self.assertNotIn('Mark as complete', response.get_data())
+        self.assertNotIn('Delete', response.get_data())
+
+    def test_users_can_see_task_modify_links_for_tasks_created_by_them(self):
+        self.create_user()
+        self.login('Michael', 'python')
+        self.app.get('/tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.create_user('Fletcher', 'fletcher@realpython.com', 'python101')
+        self.login('Fletcher', 'python101')
+        self.app.get('/tasks', follow_redirects=True)
+        response = self.create_task()
+        self.assertIn('tasks/complete/2', response.get_data())
+        self.assertIn('tasks/delete/2', response.get_data())
+
+    def test_admin_users_can_see_task_modify_links_for_all_tasks(self):
+        self.create_user()
+        self.login('Michael', 'python')
+        self.app.get('/tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.create_admin_user()
+        self.login('Superman', 'allpowerful')
+        self.app.get('/tasks', follow_redirects=True)
+        response = self.create_task()
+        self.assertIn('tasks/complete/1', response.get_data())
+        self.assertIn('tasks/delete/1', response.get_data())
+        self.assertIn('tasks/complete/2', response.get_data())
+        self.assertIn('tasks/delete/2', response.get_data())
+
 if __name__ == "__main__":
     unittest.main()
