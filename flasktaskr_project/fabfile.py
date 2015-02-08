@@ -25,7 +25,7 @@ def heroku_test():
 def rollback():
     local("heroku rollback")
 
-def prepare():
+def deploy():
     pull()
     test()
     commit()
