@@ -2,7 +2,7 @@ from fabric.api import local, settings, abort
 from fabric.contrib.console import confirm
 
 def test():
-    with settings(warn_only=True)
+    with settings(warn_only=True):
         result = local("python2 test_tasks.py -v && python2 test_users.py -v",
                         capture=True)
         if result.failed and not confirm("Tests failed. Continue?"):
@@ -13,7 +13,17 @@ def commit():
     local("git add . && git commit -am '{}'".format(message))
 
 def pull():
-    local("git pull origin master")
+    local("git --git-dir=../.git pull origin master")
+
+def push():
+    local("git --git-dir=../.git push origin master")
+
+def prepare():
+    test()
+    commit()
+    push()
+
+# deploy
 
 def heroku():
     local("git push heroku master")
@@ -30,6 +40,6 @@ def deploy():
     test()
     commit()
     heroku()
-    heroku_tests()
+    heroku_test()
     
 
